@@ -6,17 +6,17 @@ import com.orderservice.orderservice.model.AppleItem;
 import com.orderservice.orderservice.model.Item;
 import com.orderservice.orderservice.model.OrangeItem;
 import com.orderservice.orderservice.serviceImpl.ItemCostCalculator;
+import com.orderservice.orderservice.serviceImpl.OfferItemCostCalculator;
 import org.junit.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 
-public class ItemCostCalculatorTest {
+public class OfferItemCostCalculatorTest {
 
     Item appleItem;
     Item orangeItem;
 
-    ItemCostCalculator itemCostCalculator;
+    OfferItemCostCalculator itemCostCalculator;
 
     ItemConfig itemConfig = new ItemConfig();
 
@@ -24,20 +24,20 @@ public class ItemCostCalculatorTest {
     public void init(){
         appleItem = new AppleItem("Apple", 0.60);
         orangeItem = new OrangeItem("Orange", 0.25);
-        itemConfig.isOfferValid = false;
-        itemCostCalculator = new ItemCostCalculator(itemConfig);
+        itemConfig.isOfferValid = true;
+        itemCostCalculator = new OfferItemCostCalculator(itemConfig);
 
     }
 
     @Test
     public void checkCalculatePrice(){
         Double totalSum = itemCostCalculator.calculateItemCost(new String[]{"Apple", "apple", "Orange", "appLe"});
-        Assert.assertEquals(totalSum, (Double) 2.05);
+        Assert.assertEquals(totalSum, (Double) 1.45);
     }
 
     @Test
-    public void checkCalculatePrice_withEmpty(){
-        Double totalSum = itemCostCalculator.calculateItemCost(new String[]{"",""});
-        Assert.assertEquals(totalSum, (Double) 0.0);
+    public void checkCalculatePrice_withOranges(){
+        Double totalSum = itemCostCalculator.calculateItemCost(new String[]{"Apple", "apple", "Orange", "appLe", "Orange", "Orange"});
+        Assert.assertEquals(totalSum, (Double) 1.7);
     }
 }
